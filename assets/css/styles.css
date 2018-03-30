@@ -1,0 +1,87 @@
+body, html {
+	height: 100%;
+	width: 100%;
+}
+
+
+.container, .row {
+	height: 100%;
+	width: 100%;
+}
+
+#map {
+	height: 50%;
+	width: 100%;
+	display: block;
+}
+
+.dark-color {
+	color: #22223b;
+}
+
+.dark-background {
+	background-color: #22223b;
+}
+
+.purple-color {
+	color: #4A4E69;
+}
+
+.purple-background {
+	background-color: #4A4E69;
+}
+
+.middle-color {
+	color: #9A8C98;
+}
+
+.middle-background {
+	background-color: #9A8C98;
+}
+
+.tan-color {
+	color: #C9ADA7;
+}
+
+.tan-background {
+	background-color: #C9ADA7;
+}
+
+.light-color {
+	color: #F2E9E4;
+}
+
+.light-background {
+	background-color: #F2E9E4;
+}
+
+.btn {
+	background-color: #9A8C98;
+	border: #4A4E69;
+}
+
+.btn:hover {
+	background-color: #C9ADA7;
+}
+
+input {
+	border: #4A4E69 !important;
+}
+
+a {
+	color: #9A8C98;
+	text-decoration: none;
+}
+
+a:hover {
+	color: #C9ADA7;
+	text-decoration: none;
+}
+
+a:active {
+	color: #C9ADA7;
+	text-decoration: none;
+}
+
+
+

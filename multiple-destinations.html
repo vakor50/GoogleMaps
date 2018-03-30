@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Data Visualization</title>
+	<link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
+	<!-- <link rel="stylesheet" href="assets/css/styles.css"> -->
+	<style type="text/css">
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      /* Optional: Makes the sample page fill the window. */
+      body, html {
+      	height: 100%;
+      	width: 100%;
+      }
+
+
+      #main-container {
+      	height: 100%;
+      	width: 100%;
+      }
+
+      #map {
+      	height: 100%;
+      	width: 100%;
+      	display: block;
+      }
+      #destination-control {
+      	position: absolute;
+      	/*top: 120px;*/
+      	/*left: 12%;*/
+      	z-index: 5;
+      	background-color: #fff;
+      	padding: 5px;
+      	border: 1px solid #999;
+      	text-align: center;
+      	font-family: 'Roboto','sans-serif';
+      	/*line-height: 30px;*/
+      	padding-left: 10px;
+      	margin: 8px 0 8px 8px;
+      	left: 0px;
+      	top: 0px;
+		position: absolute;
+      }
+      #destination-control > input {
+      	border: 1px solid #ccc !important;
+      }
+
+      #search-container {
+      	position: absolute;
+      	z-index: 5;
+      	background-color: #fff;
+      	padding: 5px;
+      	border: none;
+      	/*text-align: center;*/
+      	font-family: 'Roboto','sans-serif';
+      	/*line-height: 30px;*/
+      	padding-left: 10px;
+      	margin: 8px 0 8px 8px;
+      	left: 0px;
+      	top: 0px;
+		position: absolute;
+		width: 390px;
+      }
+
+      #search-container > input {
+      	border: none;
+      }
+
+      #search-container > input:focus {
+      	outline: none;
+      }
+
+      #search-box {
+      	font-family: Roboto;
+      	text-overflow: ellipsis;
+      	width: 235px !important; 
+      }
+
+      .maps-btn {
+      	background: #fff;
+      	width: 40px !important;
+      }
+
+      .maps-btn:focus {
+      	/* not working */
+      	outline: none !important; 
+      }
+
+      #description {
+        font-family: Roboto;
+        font-size: 15px;
+        font-weight: 300;
+      }
+
+      #infowindow-content .title {
+        font-weight: bold;
+      }
+
+      #infowindow-content {
+        display: none;
+      }
+
+      #map #infowindow-content {
+        display: inline;
+      }
+
+      .pac-container {
+        /*padding-bottom: 12px;*/
+        /*margin-right: 12px;*/
+        left: 0px !important;
+        width: 390px !important;
+        margin-top: 13px !important;
+        margin-left: 9px !important;
+        height: 200px !important;
+      }
+
+      .pac-card {
+        margin: 10px 10px 0 0;
+        border-radius: 2px 0 0 2px;
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        outline: none;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        background-color: #fff;
+        font-family: Roboto;
+      }
+
+      .pac-controls {
+        display: inline-block;
+        padding: 5px 11px;
+      }
+
+      .pac-controls label {
+        font-family: Roboto;
+        font-size: 13px;
+        font-weight: 300;
+      }
+
+      .pac-item {
+      	padding-top: 6px !important; 
+      	padding-bottom: 7px !important;
+      	height: 40px !important;
+      }
+
+      #pac-input {
+        background-color: #fff;
+        font-family: Roboto;
+        font-size: 15px;
+        font-weight: 300;
+        margin-left: 12px;
+        padding: 0 11px 0 13px;
+        text-overflow: ellipsis;
+        width: 400px;
+      }
+
+      #pac-input:focus {
+        border-color: #4d90fe;
+      }
+
+      #title {
+        color: #fff;
+        background-color: #4d90fe;
+        font-size: 25px;
+        font-weight: 500;
+        padding: 6px 12px;
+      }
+      #target {
+        width: 345px;
+      }
+
+      #right-panel {
+      	height: 100%;
+      	float: right;
+      	/*width: 390px;*/
+      	overflow: auto;
+      }
+	</style>
+</head>
+
+<body class="">
+	<div id="main-container" >
+		<div id="search-container" class="map-control" >
+			<button class="btn maps-btn" id="menu-btn" ><span class='fa fa-bars' aria-hidden='true'></span></button>
+			<input type="name" name="search" id="search-box" class="controls" placeholder="Search Google Maps" />
+			<button class="btn maps-btn" id="search-btn" ><span class='fa fa-search' aria-hidden='true'></span></button>
+			<span style="font-size: 15px; height: 100%;">|</span>
+			<button class="btn maps-btn" id="directions-btn" ><span class='fa fa-arrow-right' aria-hidden='true'></span></button>
+		</div>
+		<div id="destination-control"  class="map-control" hidden>
+			<input type="name" name="Point 1" id="point1" class="destination" />
+			<br>
+			<input type="name" name="Point 2" id="point2" class="destination" />
+			<br>
+			<button class="btn btn-primary" id="add-btn" >+</button>
+			<button class="btn btn-primary" id="route-btn" >Route</button>
+		</div>
+		<div class="" id="map"></div>
+		<div class="" id="right-panel"></div>
+	</div>
+
+	<script src="assets/js/jquery.min.js"></script>
+	<script src="assets/bootstrap/js/bootstrap.min.js"></script>
+	<script src="https://d3js.org/d3.v4.min.js"></script>
+	<script src="assets/js/app.js"></script>
+	<script>
+		var points = 2;
+		$('#add-btn').on('click', function() {
+			points++;
+			$(this).before('<input type="name" name="Point ' + points + '" id="point' + points + '" /><br>')
+		})
+		function initMap() {
+			var directionsService = new google.maps.DirectionsService();
+			var directionsDisplay = new google.maps.DirectionsRenderer();
+  			var baltimore = new google.maps.LatLng(39.2903848, -76.6121893);
+			// Create a map object and specify the DOM element for display.
+  			var map = new google.maps.Map(document.getElementById('map'), {
+				center: baltimore,
+				zoom: 15,
+				mapTypeControl: false
+			});
+
+			// Try HTML5 geolocation.
+			if (navigator.geolocation) {
+				navigator.geolocation.getCurrentPosition(function(position) {
+					var pos = {
+						lat: position.coords.latitude,
+						lng: position.coords.longitude
+					};
+
+					map.setCenter(pos);
+				}, function() {
+					console.log("geolocation failed.");
+				});
+			} else {
+				// Browser doesn't support Geolocation
+				console.log("geolocation failed.");
+			}
+
+			// Create the search box and link it to the UI element.
+			var input = document.getElementById('search-box');
+			var searchBox = new google.maps.places.SearchBox(input);
+			// map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+			// Bias the SearchBox results towards current map's viewport.
+			map.addListener('bounds_changed', function() {
+				searchBox.setBounds(map.getBounds());
+			});
+
+			var markers = [];
+			// Listen for the event fired when the user selects a prediction and retrieve
+			// more details for that place.
+			searchBox.addListener('places_changed', function() {
+				var places = searchBox.getPlaces();
+
+				if (places.length == 0) {
+					return;
+				}
+
+				// Clear out the old markers.
+				markers.forEach(function(marker) {
+					marker.setMap(null);
+				});
+				markers = [];
+
+				// For each place, get the icon, name and location.
+				var bounds = new google.maps.LatLngBounds();
+				places.forEach(function(place) {
+					if (!place.geometry) {
+						console.log("Returned place contains no geometry");
+						return;
+					}
+					var icon = {
+						// url: place.icon,
+						size: new google.maps.Size(71, 71),
+						origin: new google.maps.Point(0, 0),
+						anchor: new google.maps.Point(17, 34),
+						scaledSize: new google.maps.Size(25, 25)
+					};
+
+					// Create a marker for each place.
+					markers.push(new google.maps.Marker({
+						map: map,
+						icon: icon,
+						title: place.name,
+						position: place.geometry.location
+					}));
+
+					if (place.geometry.viewport) {
+						// Only geocodes have viewport.
+						bounds.union(place.geometry.viewport);
+					} else {
+						bounds.extend(place.geometry.location);
+					}
+				});
+				map.fitBounds(bounds);
+			});
+
+			directionsDisplay.setMap(map);
+			directionsDisplay.setPanel(document.getElementById('right-panel'));
+
+			var calcRoute = function() {
+				var stops = [];
+				$('.destination').each(function() {
+					stops.push($(this).val());
+				});
+				// var start = document.getElementById('start').value;
+				// var end = document.getElementById('end').value;
+
+				directionsService.route({
+					origin: stops[0],
+					destination: stops[1],
+					travelMode: 'DRIVING'
+				}, function(response, status) {
+					if (status == 'OK') {
+						directionsDisplay.setDirections(response);
+					} else {
+						window.alert('Directions request failed due to ' + status);
+					}
+				});
+			}
+
+			$('#route-btn').on('click', function() {
+				calcRoute()
+			});
+
+			$('#search-btn').on('click', function () {
+
+			});
+		}
+	</script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCIJxwKM45UUM93a5hnK-hkLp5jsDXYEAc&libraries=places&callback=initMap"
+	async defer></script>
+	<!--  -->
+</body>
+</html>
